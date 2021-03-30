@@ -48,11 +48,13 @@ FILTER_MODULES = \
 allpass \
 atone \
 biquad \
+biquad_bela \
 comb \
 mode \
 moogladder \
 nlfilt \
 svf \
+svf_legacy \
 tone 
 #fir
 
@@ -60,6 +62,7 @@ NOISE_MOD_DIR = Noise
 NOISE_MODULES = \
 clockednoise \
 grainlet \
+sidnoise \
 particle 
 #dust 
 #fractal_noise 

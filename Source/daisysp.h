@@ -52,11 +52,13 @@
 #include "Filters/allpass.h"
 #include "Filters/atone.h"
 #include "Filters/biquad.h"
+#include "Filters/biquad_bela.h"
 #include "Filters/comb.h"
 #include "Filters/mode.h"
 #include "Filters/moogladder.h"
 #include "Filters/nlfilt.h"
 #include "Filters/svf.h"
+#include "Filters/svf_legacy.h"
 #include "Filters/tone.h"
 #include "Filters/fir.h"
 
@@ -67,6 +69,7 @@
 #include "Noise/grainlet.h"
 #include "Noise/particle.h"
 #include "Noise/whitenoise.h"
+#include "Noise/sidnoise.h"
 
 /** Physical Modeling Modules */
 #include "PhysicalModeling/drip.h"
