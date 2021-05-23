@@ -34,7 +34,7 @@ float SIDNoise::Process()
         /* Feed bit 0 */
         reg= reg | (bit22 ^ bit17); 
 
-        out = s82f(noiseout);       
+        out = sid_u82f(noiseout);       
     }
     else
     {

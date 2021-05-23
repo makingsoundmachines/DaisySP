@@ -10,8 +10,8 @@ namespace daisysp
 /** Synthesis of SIDNoise
 */
 
-#define S82F_SCALE 0.00390625f     /**< 1 / (2**8) */
-#define F2S8_SCALE 255.0f          /**< (2 ** 8) - 1 */
+//#define SID_U82F_SCALE 0.0078740f         /**< 1 / 127 */
+#define SID_U82F_SCALE 0.00390625f     /**< 1 / (2**8) */
 
 
 class SIDNoise
@@ -55,11 +55,11 @@ class SIDNoise
     */
     inline void SetAmp(const float a) { amp_ = a; }
 
-    inline float s82f(int8_t x)
+    // same as in in daisy_core.h
+    inline float sid_u82f(uint8_t x)
     {
-        return (float)x * S82F_SCALE;
+        return (float)x * SID_U82F_SCALE;
     }
-
 
     /** Processes the waveform to be generated, returning one sample. This should be called once per sample period.
     */
