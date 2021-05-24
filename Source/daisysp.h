@@ -75,6 +75,7 @@
 #include "PhysicalModeling/drip.h"
 #include "PhysicalModeling/modalvoice.h"
 #include "PhysicalModeling/pluck.h"
+#include "PhysicalModeling/MSM_pluck.h"
 #include "PhysicalModeling/PolyPluck.h"
 #include "PhysicalModeling/resonator.h"
 #include "PhysicalModeling/KarplusString.h"

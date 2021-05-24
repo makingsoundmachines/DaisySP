@@ -73,6 +73,7 @@ PHYSICAL_MODELING_MODULES = \
 drip \
 modalvoice \
 pluck \
+MSM_pluck \
 KarplusString \
 resonator \
 stringvoice 
