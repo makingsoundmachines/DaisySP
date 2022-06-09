@@ -102,6 +102,7 @@
 #include "Utility/maytrig.h"
 #include "Utility/metro.h"
 #include "Utility/port.h"
+#include "Utility/pattern_predictor.h"
 #include "Utility/samplehold.h"
 #include "Utility/smooth_random.h"
 

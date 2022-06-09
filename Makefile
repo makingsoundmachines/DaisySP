@@ -98,6 +98,7 @@ dcblock \
 jitter \
 metro \
 port 
+#pattern_predictor
 #delayline 
 #dsp 
 #looper
