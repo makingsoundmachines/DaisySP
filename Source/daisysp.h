@@ -16,8 +16,12 @@
 #define DSYSP_H
 
 /** Control Modules */
+#include "Control/ad.h"
+#include "Control/ade.h"
 #include "Control/adenv.h"
 #include "Control/adsr.h"
+#include "Control/ahr.h"
+#include "Control/dec.h"
 #include "Control/line.h"
 #include "Control/phasor.h"
 

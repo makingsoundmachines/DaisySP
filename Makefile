@@ -8,8 +8,12 @@ MODULE_DIR = Source
 
 CONTROL_MOD_DIR = Control
 CONTROL_MODULES = \
+ad \
+ade \
 adenv \
 adsr \
+ahr \
+dec \
 line \
 phasor
 
