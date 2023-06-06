@@ -102,7 +102,8 @@ UTILITY_MODULES = \
 dcblock \
 jitter \
 metro \
-port 
+fm_utils \
+port
 #pattern_predictor
 #delayline 
 #dsp 

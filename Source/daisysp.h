@@ -24,6 +24,7 @@
 #include "Control/dec.h"
 #include "Control/line.h"
 #include "Control/phasor.h"
+#include "Control/fm_utils.h"
 
 /** Drum Modules */
 #include "Drums/analogbassdrum.h"
