@@ -12,7 +12,7 @@ ad \
 ade \
 adenv \
 adsr \
-ahr \
+ahd \
 dec \
 line \
 phasor
@@ -93,7 +93,8 @@ oscillatorbank \
 variablesawosc \
 variableshapeosc \
 vosim \
-zoscillator 
+zoscillator  \
+sine 
 #harmonic_osc 
 
 UTILITY_MOD_DIR = Utility

@@ -20,7 +20,7 @@
 #include "Control/ade.h"
 #include "Control/adenv.h"
 #include "Control/adsr.h"
-#include "Control/ahr.h"
+#include "Control/ahd.h"
 #include "Control/dec.h"
 #include "Control/line.h"
 #include "Control/phasor.h"
@@ -96,6 +96,7 @@
 #include "Synthesis/variableshapeosc.h"
 #include "Synthesis/vosim.h"
 #include "Synthesis/zoscillator.h"
+#include "Synthesis/sine.h"
 
 /** Utility Modules */
 #include "Utility/dcblock.h"
@@ -107,6 +108,7 @@
 #include "Utility/metro.h"
 #include "Utility/port.h"
 #include "Utility/pattern_predictor.h"
+#include "Utility/parameter_interpolator.h"
 #include "Utility/samplehold.h"
 #include "Utility/smooth_random.h"
 
