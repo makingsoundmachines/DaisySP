@@ -3,9 +3,9 @@
 
 using namespace daisysp;
 
-float FM_utility::Sigmoid(float x, float y) 
+float FM_utility::Sigmoid(float x, float k) 
 { 
-    return (x - x * y) / (y - abs(x) * 2 * y + 1); 
+    return (x - x * k) / (k - abs(x) * 2 * k + 1); 
 }
 
 float FM_utility::tanh_approx(float x)

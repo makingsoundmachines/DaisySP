@@ -20,7 +20,7 @@ class FM_utility
     /** Normalized tunable sigmoid by Dale H. Emery
         \return https://dhemery.github.io/DHE-Modules/technical/sigmoid/
     */
-    float Sigmoid(float x, float y);
+    float Sigmoid(float x, float k);
 
     /** tanh() approx from JUCE
     */

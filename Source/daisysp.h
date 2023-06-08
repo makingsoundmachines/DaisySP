@@ -98,6 +98,7 @@
 #include "Synthesis/vosim.h"
 #include "Synthesis/zoscillator.h"
 #include "Synthesis/sine.h"
+#include "Synthesis/skew.h"
 
 /** Utility Modules */
 #include "Utility/dcblock.h"

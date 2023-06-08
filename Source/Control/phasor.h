@@ -3,6 +3,8 @@
 #define DSY_PHASOR_H
 #ifdef __cplusplus
 
+#include "Utility/dsp.h"
+
 namespace daisysp
 {
 /** Generates a normalized signal moving from 0-1 at the specified frequency.
@@ -20,13 +22,14 @@ class Phasor
     sample rate, and freq are in Hz
     initial phase is in radians
     Additional Init functions have defaults when arg is not specified:
-    - phs = 0.0f
+    - phase = 0.0f
     - freq = 1.0f
     */
     inline void Init(float sample_rate, float freq, float initial_phase)
     {
         sample_rate_ = sample_rate;
-        phs_         = initial_phase;
+        phase_       = initial_phase;
+        sr_recip_    = 1.0f / sample_rate;
         SetFreq(freq);
     }
 
@@ -54,9 +57,27 @@ class Phasor
     */
     inline float GetFreq() { return freq_; }
 
+
+    /** Returns current phase increase
+    */
+    inline float GetInc() { return inc_; }
+
+
+    /** Returns true if cycle is at end of cycle. Set during call to Process.
+    */
+    inline bool IsEOC() { return eoc_; } 
+
+    /** Adds a value 0.0-1.0 (mapped to 0.0-TWO_PI) to the current phase. Useful for PM and "FM" synthesis.
+    */
+    inline void PhaseAdd(float phase) { phase_ += (phase * TWOPI_F); }
+
+    /** Resets the phase to the input argument. If no argument is present, it will reset phase to 0.0;
+    */
+    inline void Reset(float phase = 0.0f) { phase_ = phase; }       
+
   private:
     float freq_;
-    float sample_rate_, inc_, phs_;
+    float sample_rate_, sr_recip_, inc_, phase_, eoc_;
 };
 } // namespace daisysp
 #endif

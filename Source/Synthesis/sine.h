@@ -25,9 +25,9 @@ class SineOscillator
     SineOscillator() {}
     ~SineOscillator() {}
 
-    const float kSineLUTSize = 1024.0f;
-    const size_t kSineLUTQuadrature = 128;
-    const size_t kSineLUTBits = 9;
+    const float kSineLUTSize = 1024.0f; // 512.f -> value adjusted for larger LUT
+    const size_t kSineLUTQuadrature = 128; // 128
+    const size_t kSineLUTBits = 10; // 9 -> value adjusted for larger LUT
 
     /** Interpolation
     */

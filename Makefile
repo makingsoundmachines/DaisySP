@@ -94,7 +94,8 @@ variablesawosc \
 variableshapeosc \
 vosim \
 zoscillator  \
-sine 
+sine \
+skew 
 #harmonic_osc 
 
 UTILITY_MOD_DIR = Utility
