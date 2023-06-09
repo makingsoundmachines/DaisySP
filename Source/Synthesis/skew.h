@@ -4,7 +4,6 @@
 
 #include "Synthesis/sine.h"
 #include "Control/phasor.h"
-#include "Control/fm_utils.h"
 #include "Utility/dsp.h"
 #include <stdint.h>
 #include <stdlib.h>
@@ -18,7 +17,9 @@ namespace daisysp
     @brief     Skew Oscillator Module \n 
     @author Making Sound Machines
     @date June 2023 \n
-    Inspired by Ess Mattison / fors.fm. \n
+    A module using phasors + LUT to skew and tilt waveforms.
+    Inspired by "Let's learn some FM" - Ess Mattison / fors.fm. \n
+    https://www.twitch.tv/videos/573170445 \n
 */
 
 
@@ -35,6 +36,8 @@ class Skew
     {
         SKEW_SINE,
         SKEW_SINE_PM,
+        SKEW_SINE_SIG,
+        SKEW_SINE_SIG_PM,        
         SKEW_SINE_SQUARE,
         SKEW_TRI_SQUARE,
         SKEW_TRI_SAW,
@@ -47,7 +50,7 @@ class Skew
     };
 
 
-    /** Init ZOscillator module
+    /** Init Skew Oscillator module
         \param sample_rate Audio engine sample rate.
     */
     void Init(float sample_rate);
@@ -67,13 +70,22 @@ class Skew
     */
     float tanh_approx(float x);
 
+    /** Plain Sine
+    */
+    float Sine(float phase);
+
+    /** Plain Sine with skew = phase mod +/- 32.f (
+     * one phase shift is 0.0f - 1.0f
+    */
+    float SinePM(float phase, float skew);
+
     /** Skewed Sine
     */
-    float Sine(float phase, float skew);
+    float SineSigmoid(float phase, float skew);
 
     /** Skewed Sine optimized for phase mod
     */
-    float SinePM(float phase, float skew);
+    float SineSigmoidPM(float phase, float skew);
 
     /** Sine which can get more squarish
     */
@@ -133,6 +145,14 @@ class Skew
     */
     void SetPhase(float phase);
 
+    /** Set the phase
+        \param phase 0.0f - 1.0f
+    */
+    inline void ResetPhase()
+    {
+        phase_ = 0.0f;
+    }    
+
     /** Set skew
         \param skew +/-1.0f, clamped to to +/-0.99f
     */
@@ -143,10 +163,17 @@ class Skew
     */
     void SetAmp(float amp);
 
+    /** Returns true if cycle is at end of cycle. Set during call to Process.
+    */
+    inline bool IsEOC() { return eoc_; }
+
+    /** Returns true if cycle is at end of cycle. Set during call to Process.
+    */
+    inline float GetPhase() { return phase_; }    
+
   private:
     Phasor phasor_;
     SineOscillator sine_;
-    FM_utility sigmoid_;
 
     uint8_t wave_;
     float sample_rate_;
@@ -158,6 +185,7 @@ class Skew
     float skew_;
     float phase_inc_;
     float last_out_;
+    float eoc_;
 };
 
 } // namespace daisysp

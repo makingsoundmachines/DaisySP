@@ -99,6 +99,7 @@
 #include "Synthesis/zoscillator.h"
 #include "Synthesis/sine.h"
 #include "Synthesis/skew.h"
+#include "Synthesis/fm_2op.h"
 
 /** Utility Modules */
 #include "Utility/dcblock.h"

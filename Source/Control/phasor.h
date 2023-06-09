@@ -73,7 +73,7 @@ class Phasor
 
     /** Resets the phase to the input argument. If no argument is present, it will reset phase to 0.0;
     */
-    inline void Reset(float phase = 0.0f) { phase_ = phase; }       
+    inline void Reset(float phase = 0.0f) { phase_ = (phase * TWOPI_F); }       
 
   private:
     float freq_;
