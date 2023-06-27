@@ -143,3 +143,66 @@ void SineOscillator::RenderInternal(float frequency, float amplitude, float* out
         }
     }
 } 
+
+
+
+void FastSineOscillator::Init() {
+    x_ = 1.0f;
+    y_ = 0.0f;
+    epsilon_ = 0.0f;
+    amplitude_ = 0.0f;
+}
+  
+void FastSineOscillator::Render(float frequency, float* out, size_t size) {
+    RenderInternal<NORMAL>(frequency, 1.0f, out, NULL, size);
+}
+  
+void FastSineOscillator::Render(float frequency, float amplitude, float* out, size_t size) {
+    RenderInternal<ADDITIVE>(frequency, amplitude, out, NULL, size);
+}
+
+void FastSineOscillator::RenderQuadrature(float frequency, float amplitude, float* x, float* y, size_t size) {
+    RenderInternal<QUADRATURE>(frequency, amplitude, x, y, size);
+}
+  
+
+template<FastSineOscillator::Mode mode>
+void FastSineOscillator::RenderInternal(
+      float frequency, float amplitude, float* out, float* out_2, size_t size) {
+    if (frequency >= 0.25f) {
+      frequency = 0.25f;
+      amplitude = 0.0f;
+    } else {
+      amplitude *= 1.0f - frequency * 4.0f;
+    }
+    
+    ParameterInterpolator epsilon(&epsilon_, Fast2Sin(frequency), size);
+    ParameterInterpolator am(&amplitude_, amplitude, size);
+    float x = x_;
+    float y = y_;
+    
+    const float norm = x * x + y * y;
+    if (norm <= 0.5f || norm >= 2.0f) {
+      const float scale = fast_rsqrt_carmack(norm);
+      x *= scale;
+      y *= scale;
+    }
+    
+    while (size--) {
+      const float e = epsilon.Next();
+      x += e * y;
+      y -= e * x;
+      if (mode == ADDITIVE) {
+        *out++ += am.Next() * x;
+      } else if (mode == NORMAL) {
+        *out++ = x;
+      } else if (mode == QUADRATURE) {
+        const float amplitude = am.Next();
+        *out++ = x * amplitude;
+        *out_2++ = y * amplitude;
+      }
+    }
+    x_ = x;
+    y_ = y;
+  
+}

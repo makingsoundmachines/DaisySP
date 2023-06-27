@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <math.h>
 #ifdef __cplusplus
 
 /** @file sine.h */
@@ -17,6 +18,10 @@ namespace daisysp
     \n to an independent module. \n
     Original code written by Emilie Gillet in 2016. \n
 */
+
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&);               \
+  void operator=(const TypeName&)
 
 
 class SineOscillator
@@ -97,13 +102,113 @@ class SineOscillator
     // For interpolation of parameters.
     float frequency_;
     float amplitude_;
+
+  DISALLOW_COPY_AND_ASSIGN(SineOscillator);
+};
+
+// from stmlib/dsp/rsqrt.h
+
+template<typename To, typename From>
+struct unsafe_bit_cast_t {
+    union {
+        From from;
+        To to;
+    };
+};
+
+template<typename To, typename From>
+To unsafe_bit_cast(From from) {
+    unsafe_bit_cast_t<To, From> u;
+    u.from = from;
+    return u.to;
+}
+
+class FastSineOscillator {
+  public:
+    FastSineOscillator() { }
+    ~FastSineOscillator() { }
+
+    void Init();
+    
+    enum Mode {
+        NORMAL,
+        ADDITIVE,
+        QUADRATURE
+    };
+    
+    static inline float Fast2Sin(float f) {
+        // In theory, epsilon = 2 sin(pi f)
+        // Here, to avoid the call to sinf, we use a 3rd order polynomial
+        // approximation, which looks like a Taylor expansion, but with a
+        // correction term to give a good trade-off between average error
+        // (1.13 cents) and maximum error (7.33 cents) when generating sinewaves
+        // in the 16 Hz to 16kHz range (with sr = 48kHz).
+        const float f_pi = f * float(M_PI);
+        return f_pi * (2.0f - (2.0f * 0.96f / 6.0f) * f_pi * f_pi);
+    }
+    
+    void Render(float frequency, float* out, size_t size);
+    
+    void Render(float frequency, float amplitude, float* out, size_t size);
+
+    void RenderQuadrature(float frequency, float amplitude, float* x, float* y, size_t size);
+
+
+
+    static inline float fast_rsqrt_carmack(float x) {
+        uint32_t i;
+        float x2, y;
+        const float threehalfs = 1.5f;
+        y = x;
+        i = unsafe_bit_cast<uint32_t, float>(y);
+        i = 0x5f3759df - (i >> 1);
+        y = unsafe_bit_cast<float, uint32_t>(i);
+        x2 = x * 0.5f;
+        y = y * (threehalfs - (x2 * y * y));
+        return y;
+    }
+
+    static inline float fast_rsqrt_accurate(float fp0) {
+        float _min = 1.0e-38;
+        float _1p5 = 1.5;
+        float fp1, fp2, fp3;
+
+        uint32_t q = unsafe_bit_cast<uint32_t, float>(fp0);
+        fp2 = unsafe_bit_cast<float, uint32_t>(0x5F3997BB - ((q >> 1) & 0x3FFFFFFF));
+        fp1 = _1p5 * fp0 - fp0;
+        fp3 = fp2 * fp2;
+        if (fp0 < _min) {
+            return fp0 > 0 ? fp2 : 1000.0f;
+        }
+        fp3 = _1p5 - fp1 * fp3;
+        fp2 = fp2 * fp3;
+        fp3 = fp2 * fp2;
+        fp3 = _1p5 - fp1 * fp3;
+        fp2 = fp2 * fp3;
+        fp3 = fp2 * fp2;
+        fp3 = _1p5 - fp1 * fp3;
+        return fp2 * fp3;
+    }
+
+ private:
+  template<Mode mode>
+  void RenderInternal(float frequency, float amplitude, float* out, float* out_2, size_t size);
+  // Oscillator state.
+  float x_;
+  float y_;
+
+  // For interpolation of parameters.
+  float epsilon_;
+  float amplitude_;
+
+  DISALLOW_COPY_AND_ASSIGN(FastSineOscillator);
 };
 
 // from plaits/resources.h
 
 // #define LUT_SINE 0
 
-const float lut_sine[] = {
+static const float lut_sine[] = {
    0.000000000e+00,  6.135884649e-03,  1.227153829e-02,  1.840672991e-02,
    2.454122852e-02,  3.067480318e-02,  3.680722294e-02,  4.293825693e-02,
    4.906767433e-02,  5.519524435e-02,  6.132073630e-02,  6.744391956e-02,
